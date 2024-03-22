@@ -2,16 +2,17 @@
 #ifndef MQTTX_H
 #define MQTTX_H
 #include <MQTT.h>
-#include <WiFi.h>
 #include <WiFiClient.h>
 
-WiFiClient net;
 MQTTClient client;
-class mqttx {
-   private:
-    /* data */
-   public:
-    mqttx();
+
+class mqttx
+{
+private:
+    WiFiClient &_client;
+
+public:
+    mqttx(WiFiClient &client);
     void mqttConnect(String text);
     void mqttloop();
     bool mqttlost();
