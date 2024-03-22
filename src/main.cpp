@@ -2,13 +2,13 @@
 // #include <WebServer.h>
 #include "./comunication/comunication.h"
 #include "./eeprom/eeprom.h"
-#include "./mqtt/mqtt.h"
+#include "./mqttx/mqttx.h"
 #include "./recived/recived.h"
 // #include "HTML.h"
 eeprom prom;
 comunication com;
 recived recive;
-mqtt massage;
+mqttx massage;
 int valor;
 // WebServer server(80);
 

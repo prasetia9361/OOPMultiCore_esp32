@@ -6,7 +6,7 @@ class comunication {
    private:
     // String text;
     bool state = false;
-    int message;
+    // int message;
 
    public:
     comunication();

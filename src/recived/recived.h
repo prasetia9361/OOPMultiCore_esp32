@@ -1,7 +1,10 @@
 #include <Arduino.h>
 #ifndef RECIVED_H
 #define RECIVED_H
-#include "../mqtt/mqtt.h"
+#include <LoRa.h>
+#include <SPI.h>
+
+#include "../mqttx/mqttx.h"
 class recived {
    private:
     byte localAddress = 0xBB;  // address of this device

@@ -1,17 +1,14 @@
 #include "recived.h"
 
-#include <LoRa.h>
-#include <SPI.h>
-
 #include <iostream>
 
 recived::recived() {}
 void recived::loraconnect() {
     LoRa.setPins(ss, rst, dio0);
     if (!LoRa.begin(433E6)) {
-        Serial.println("Starting LoRa failed!");
-        while (1)
-            ;
+        while (true) {
+            Serial.println("Starting LoRa failed!");
+        }
     }
 }
 
@@ -30,7 +27,7 @@ String recived::getValue(String data, char separator, int index) {
 }
 
 void recived::onRecive(uint64_t numId) {
-    mqtt mqtt;
+    mqttx mqttx;
     packetSize = LoRa.parsePacket();
     if (packetSize == 0) return;
     memset(cadena, 0,
@@ -71,12 +68,12 @@ void recived::onRecive(uint64_t numId) {
     if (recipient == localAddress && sender == destination) {
         if (millis() - sending >= 1000) {
             sending = millis();
-            mqtt.sendtemp(numId, temp);
-            mqtt.sendlong(numId, longitude);
-            mqtt.sendlat(numId, latitude);
-            mqtt.sendspeed(numId, speed);
-            mqtt.sendVolatge(numId, voltage);
-            mqtt.sendCurrent(numId, current);
+            mqttx.sendtemp(numId, temp);
+            mqttx.sendlong(numId, longitude);
+            mqttx.sendlat(numId, latitude);
+            mqttx.sendspeed(numId, speed);
+            mqttx.sendVolatge(numId, voltage);
+            mqttx.sendCurrent(numId, current);
         }
     } else {
         Serial.println("tidak ada data");
