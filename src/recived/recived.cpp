@@ -1,8 +1,6 @@
 #include "recived.h"
 
-#include <iostream>
-
-recived::recived() {}
+recived::recived(mqttx &message) : _message(message) {}
 void recived::loraconnect() {
     LoRa.setPins(ss, rst, dio0);
     if (!LoRa.begin(433E6)) {
@@ -27,7 +25,8 @@ String recived::getValue(String data, char separator, int index) {
 }
 
 void recived::onRecive(uint64_t numId) {
-    mqttx mqttx;
+    // mqttx _message(_client);
+    // mqttx _message;
     packetSize = LoRa.parsePacket();
     if (packetSize == 0) return;
     memset(cadena, 0,
@@ -68,12 +67,12 @@ void recived::onRecive(uint64_t numId) {
     if (recipient == localAddress && sender == destination) {
         if (millis() - sending >= 1000) {
             sending = millis();
-            mqttx.sendtemp(numId, temp);
-            mqttx.sendlong(numId, longitude);
-            mqttx.sendlat(numId, latitude);
-            mqttx.sendspeed(numId, speed);
-            mqttx.sendVolatge(numId, voltage);
-            mqttx.sendCurrent(numId, current);
+            _message.sendtemp(numId, temp);
+            _message.sendlong(numId, longitude);
+            _message.sendlat(numId, latitude);
+            _message.sendspeed(numId, speed);
+            _message.sendVolatge(numId, voltage);
+            _message.sendCurrent(numId, current);
         }
     } else {
         Serial.println("tidak ada data");

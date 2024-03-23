@@ -3,10 +3,14 @@
 #define RECIVED_H
 #include <LoRa.h>
 #include <SPI.h>
+// #include <WiFiClient.h>
 
 #include "../mqttx/mqttx.h"
+
 class recived {
    private:
+    // mqttx &_message(WiFiClient &_clientt);
+    mqttx &_message;
     byte localAddress = 0xBB;  // address of this device
     byte destination = 0xFF;
     int ss = 5;
@@ -24,7 +28,8 @@ class recived {
     String current;
 
    public:
-    recived();
+    // recived(mqttx &message(WiFiClient &clientt));
+    recived(mqttx &message);
     void loraconnect();
     String getValue(String data, char separator, int index);
     void onRecive(uint64_t numId);

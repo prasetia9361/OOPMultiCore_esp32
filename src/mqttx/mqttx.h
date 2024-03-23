@@ -4,14 +4,12 @@
 #include <MQTT.h>
 #include <WiFiClient.h>
 
-MQTTClient client;
-
-class mqttx
-{
-private:
+class mqttx {
+   private:
+    MQTTClient client;
     WiFiClient &_client;
 
-public:
+   public:
     mqttx(WiFiClient &client);
     void mqttConnect(String text);
     void mqttloop();

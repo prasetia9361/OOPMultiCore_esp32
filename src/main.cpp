@@ -1,18 +1,20 @@
 #include <Arduino.h>
 // #include <WebServer.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+
 #include "./comunication/comunication.h"
 #include "./eeprom/eeprom.h"
 #include "./mqttx/mqttx.h"
 #include "./recived/recived.h"
-#include <WiFi.h>
-#include <WiFiClient.h>
+
 WiFiClient wifiClient;
 
 // #include "HTML.h"
 eeprom prom;
 comunication com;
-recived recive;
 mqttx massage(wifiClient);
+recived recive(massage);
 int valor;
 // WebServer server(80);
 
@@ -26,8 +28,8 @@ String passWifi;
 uint64_t chipId;
 
 byte msgCount = 0;
-long lastSendTime = 0; // last send time
-int interval = 2000;   // interval between sends
+long lastSendTime = 0;  // last send time
+int interval = 2000;    // interval between sends
 int length = 512;
 
 TaskHandle_t Task1;
@@ -38,8 +40,7 @@ void restart(void *pvParameters);
 void sending(void *pvParameters);
 void handleClient(void *pvParameters);
 
-void setup()
-{
+void setup() {
     Serial.begin(115200);
     Serial.println("LoRa Receiver");
 
@@ -55,8 +56,7 @@ void setup()
     recive.loraconnect();
     Serial.println("LoRa Active");
 
-    if (!com.wifiStatus())
-    {
+    if (!com.wifiStatus()) {
         com.wifiAPconnect(ssid, pass);
         prom.settingWifi();
         // server.on("/", handleRoot);  // Routine untuk menghandle homepage
@@ -64,9 +64,7 @@ void setup()
         // server.begin();
         xTaskCreatePinnedToCore(handleClient, "Task3", 1000, NULL, 5, &Task3,
                                 0);
-    }
-    else if (com.wifiStatus())
-    {
+    } else if (com.wifiStatus()) {
         com.wifiAP();
         massage.mqttConnect(String(chipId) + "/#");
         xTaskCreatePinnedToCore(restart, "Task1", 1000, NULL, 9, &Task1, 1);
@@ -76,13 +74,10 @@ void setup()
 
 void loop() {}
 
-void restart(void *pvParameters)
-{
-    while (true)
-    {
-        massage.mqttloop(); // task1
-        if (massage.mqttlost())
-        {
+void restart(void *pvParameters) {
+    while (true) {
+        massage.mqttloop();  // task1
+        if (massage.mqttlost()) {
             com.wifiAP();
             massage.mqttConnect(String(chipId) + "/#");
         }
@@ -90,19 +85,15 @@ void restart(void *pvParameters)
     }
 }
 
-void handleClient(void *pvParameters)
-{
-    while (true)
-    {
+void handleClient(void *pvParameters) {
+    while (true) {
         prom.notConnect();
         delay(50);
     }
 }
 
-void sending(void *pvParameters)
-{
-    while (true)
-    {
+void sending(void *pvParameters) {
+    while (true) {
         recive.onRecive(chipId);
         // onRecive(LoRa.parsePacket());
         delay(20);
