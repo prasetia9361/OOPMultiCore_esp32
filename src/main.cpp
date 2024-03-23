@@ -81,7 +81,7 @@ void restart(void *pvParameters) {
             com.wifiAP();
             massage.mqttConnect(String(chipId) + "/#");
         }
-        delay(20);
+        delay(5000);
     }
 }
 
