@@ -1,5 +1,4 @@
 #include <Arduino.h>
-// #include <WebServer.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
 
@@ -10,26 +9,19 @@
 
 WiFiClient wifiClient;
 
-// #include "HTML.h"
 eeprom prom;
 comunication com;
 mqttx massage(wifiClient);
 recived recive(massage);
-int valor;
 // WebServer server(80);
 
 #define ssid "Setting_WiFi"
 #define pass "1qazxsw2"
-// String ssidNew = "";
-// String passNew;
+
 String ssidWifi;
 String passWifi;
 
 uint64_t chipId;
-
-byte msgCount = 0;
-long lastSendTime = 0;  // last send time
-int interval = 2000;    // interval between sends
 int length = 512;
 
 TaskHandle_t Task1;
