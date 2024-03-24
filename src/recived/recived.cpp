@@ -1,6 +1,7 @@
 #include "recived.h"
 
-recived::recived(mqttx &message) : _message(message) {}
+recived::recived(mqttx &message, ArduinoJSON &httpPost)
+    : _message(message), _httpPost(httpPost) {}
 void recived::loraconnect() {
     LoRa.setPins(ss, rst, dio0);
     if (!LoRa.begin(433E6)) {
@@ -73,6 +74,15 @@ void recived::onRecive(uint64_t numId) {
             _message.sendspeed(numId, speed);
             _message.sendVolatge(numId, voltage);
             _message.sendCurrent(numId, current);
+            _httpPost.createTemp(temp.toFloat());
+            _httpPost.createLat(latitude.toFloat());
+            _httpPost.createLon(longitude.toFloat());
+            _httpPost.createSpeed(speed.toFloat());
+            _httpPost.createVoltage(voltage.toFloat());
+            _httpPost.createCurrent(current.toFloat());
+            _httpPost.createTeam();
+            _httpPost.serializeJson(512);
+            _httpPost.sendingJsonPost();
         }
     } else {
         Serial.println("tidak ada data");

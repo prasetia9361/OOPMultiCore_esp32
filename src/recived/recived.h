@@ -5,12 +5,13 @@
 #include <SPI.h>
 // #include <WiFiClient.h>
 
+#include "../ArduinoJSON/ArduinoJSON.h"
 #include "../mqttx/mqttx.h"
-
 class recived {
    private:
     // mqttx &_message(WiFiClient &_clientt);
     mqttx &_message;
+    ArduinoJSON &_httpPost;
     byte localAddress = 0xBB;  // address of this device
     byte destination = 0xFF;
     int ss = 5;
@@ -29,7 +30,7 @@ class recived {
 
    public:
     // recived(mqttx &message(WiFiClient &clientt));
-    recived(mqttx &message);
+    recived(mqttx &message, ArduinoJSON &httpPost);
     void loraconnect();
     String getValue(String data, char separator, int index);
     void onRecive(uint64_t numId);
