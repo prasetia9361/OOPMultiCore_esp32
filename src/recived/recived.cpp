@@ -1,14 +1,18 @@
 #include "recived.h"
 
-recived::recived(mqttx &message, ArduinoJSON &httpPost)
+recived::recived(mqttx &message, postJson &httpPost)
     : _message(message), _httpPost(httpPost) {}
+
 void recived::loraconnect() {
     LoRa.setPins(ss, rst, dio0);
-    if (!LoRa.begin(433E6)) {
-        while (true) {
-            Serial.println("Starting LoRa failed!");
-        }
+    while (!LoRa.begin(433E6)) {
+        Serial.println("Starting LoRa failed!");
     }
+    // if (!LoRa.begin(433E6)) {
+    //     while (true) {
+    //         Serial.println("Starting LoRa failed!");
+    //     }
+    // }
 }
 
 String recived::getValue(String data, char separator, int index) {
@@ -81,7 +85,7 @@ void recived::onRecive(uint64_t numId) {
             _httpPost.createVoltage(voltage.toFloat());
             _httpPost.createCurrent(current.toFloat());
             _httpPost.createTeam();
-            _httpPost.serializeJson(512);
+            // _httpPost.serialJson(512);
             _httpPost.sendingJsonPost();
         }
     } else {

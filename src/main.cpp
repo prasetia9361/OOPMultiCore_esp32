@@ -2,17 +2,17 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 
-#include "./ArduinoJSON/ArduinoJSON.h"
 #include "./comunication/comunication.h"
 #include "./eeprom/eeprom.h"
 #include "./mqttx/mqttx.h"
+#include "./postJson/postJson.h"
 #include "./recived/recived.h"
 WiFiClient wifiClient;
 
 eeprom prom;
 comunication com;
 mqttx massage(wifiClient);
-ArduinoJSON httpPost;
+postJson httpPost;
 recived recive(massage, httpPost);
 // WebServer server(80);
 
